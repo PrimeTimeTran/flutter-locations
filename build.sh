@@ -12,6 +12,6 @@ $FLUTTER version $FLUTTER_VERSION
 $FLUTTER config --enable-web
 
 # Build flutter for web
-$FLUTTER build web
+$FLUTTER build web 
 
 echo "OK"
