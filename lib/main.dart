@@ -3,8 +3,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:geolocator/geolocator.dart';
 import 'package:dart_ipify/dart_ipify.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(MyApp());
 }
 
@@ -49,8 +51,8 @@ Future<List> fetchAlbum() async {
   final response =
       await http.get(Uri.parse('https://jsonplaceholder.typicode.com/todos'));
   final response2 =
-      await http.get(Uri.parse('http://localhost:5000/api/locations'));
-  print(response2.body);
+      await http.get(Uri.parse('http://localhost:5000/locations'));
+  print(response2);
   if (response.statusCode == 200) {
     return jsonDecode(response.body);
   } else {
@@ -94,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() async {
     final ip = await Ipify.ipv4();
-    final geo = await Ipify.geo('at_q45RwWwG71w0CvON3ioUJuPwYgm75');
+    final geo = await Ipify.geo(dotenv.env['API_KEY'].toString());
     final coords = await _determinePosition();
     setState(() {
       _counter = '$ipv4';
