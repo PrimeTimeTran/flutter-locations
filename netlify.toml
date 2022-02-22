@@ -1,3 +1,3 @@
 [build]
   command = "./build.sh"
-  publish = "web"
+  publish = "build/web"
