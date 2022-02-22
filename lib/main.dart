@@ -98,6 +98,16 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  getWidget() {
+    if (_counter.isNotEmpty) {
+      return Text('$_counter');
+    }
+    return Text(
+      'Please click the + icon and accept permissions =)',
+      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,15 +119,15 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Container(
-              padding: EdgeInsets.symmetric(horizontal: 50.0),
-              child: ListView.builder(
-                itemCount: snapshot.data?.length,
-                itemBuilder: (context, index) {
-                  var text = snapshot.data?[index]['title'];
-                  return Text("${text}");
-                },
-              )
-              ),
+              // padding: EdgeInsets.symmetric(horizontal: 50.0),
+              child: Padding(
+                  padding: EdgeInsets.all(50.0),
+                  child: Column(
+                    children: <Widget>[
+                      getWidget(),
+                    ],
+                  )),
+                
             );
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');
