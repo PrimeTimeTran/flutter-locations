@@ -48,6 +48,9 @@ Future<Position> _determinePosition() async {
 Future<List> fetchAlbum() async {
   final response =
       await http.get(Uri.parse('https://jsonplaceholder.typicode.com/todos'));
+  final response2 =
+      await http.get(Uri.parse('http://localhost:5000/api/locations'));
+  print(response2.body);
   if (response.statusCode == 200) {
     return jsonDecode(response.body);
   } else {
@@ -78,6 +81,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String _counter = '';
+  String ipv4 = '';
+  String mygeo = '';
+  String latlong = '';
   late Future<List> futureAlbum;
 
   @override
@@ -87,20 +93,41 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _incrementCounter() async {
-    final ipv4 = await Ipify.ipv4();
-    print(ipv4);
-    final mygeo = await Ipify.geo('at_q45RwWwG71w0CvON3ioUJuPwYgm75');
-    print(mygeo.location);
-    var go = await _determinePosition();
-    print(go);
+    final ip = await Ipify.ipv4();
+    final geo = await Ipify.geo('at_q45RwWwG71w0CvON3ioUJuPwYgm75');
+    final coords = await _determinePosition();
     setState(() {
-      _counter = '$go, $ipv4, $mygeo';
+      _counter = '$ipv4';
+      ipv4 = '$ip';
+      mygeo = '$geo';
+      latlong = '$coords';
     });
   }
 
   getWidget() {
     if (_counter.isNotEmpty) {
-      return Text('$_counter');
+      return Container(
+        padding: EdgeInsets.all(80),
+        child: Column(
+          children: [
+            Text('$ipv4',
+                style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30)),
+            Text('$mygeo',
+                style: TextStyle(
+                    color: Colors.yellow,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20)),
+            Text('$latlong',
+                style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30)),
+          ],
+        ),
+      );
     }
     return Text(
       'Please click the + icon and accept permissions =)',
@@ -112,22 +139,20 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('$_counter'),
+        title: Text('Sky Mavis Exam:'),
       ),
       body: FutureBuilder<List>(
         future: futureAlbum,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Container(
-              // padding: EdgeInsets.symmetric(horizontal: 50.0),
               child: Padding(
-                  padding: EdgeInsets.all(50.0),
+                  padding: EdgeInsets.all(10.0),
                   child: Column(
                     children: <Widget>[
                       getWidget(),
                     ],
                   )),
-                
             );
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');
