@@ -99,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final geo = await Ipify.geo(dotenv.env['API_KEY'].toString());
     final coords = await _determinePosition();
     setState(() {
-      _counter = '$ipv4';
+      _counter = '$ip';
       ipv4 = '$ip';
       mygeo = '$geo';
       latlong = '$coords';
